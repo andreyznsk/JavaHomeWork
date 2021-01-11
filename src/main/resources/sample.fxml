@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="center" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.JavaLevel2.lesson4.Controller">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem onAction="#buttonExitAction" text="Exit" />
+        </Menu>
+    </MenuBar>
+   <TextArea fx:id="textArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="Empty" />
+    <HBox>
+        <TextField fx:id="textField" onAction="#enterPress" HBox.hgrow="ALWAYS" />
+        <Button onAction="#buttonSendAction" text="Send" />
+    </HBox>
+</VBox>
