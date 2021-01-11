@@ -16,7 +16,7 @@ import static ru.JavaLevel2.Lesson7.ClaintServer.Command.*;
 
 public class Network {
 
-         private static final String SERVER_ADDRESS = "192.168.0.18";
+         private static final String SERVER_ADDRESS = "localhost";
         private static final int SERVER_PORT = 8189;
 
         private String host;

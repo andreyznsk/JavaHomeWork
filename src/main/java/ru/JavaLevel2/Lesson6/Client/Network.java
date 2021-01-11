@@ -18,13 +18,9 @@ public class Network {
     private DataOutputStream outputStream;
     private Socket socket;
 
-    public Network() {
-        this(SERVER_ADDRESS, SERVER_PORT);
-    }
-
-    public Network(String host, int port) {
+       public Network(String host) {
         this.host = host;
-        this.port = port;
+        this.port = SERVER_PORT;
     }
 
     public boolean connect() {
