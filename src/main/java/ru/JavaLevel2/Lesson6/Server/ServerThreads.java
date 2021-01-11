@@ -10,7 +10,6 @@ import java.net.SocketException;
 
 public class ServerThreads extends Thread {
     private int port;
-    //String serverMessage;
 
     DataOutputStream out;
 
