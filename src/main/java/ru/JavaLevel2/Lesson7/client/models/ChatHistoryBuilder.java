@@ -7,9 +7,13 @@ public class ChatHistoryBuilder {
     private BufferedReader reader;
     private BufferedWriter writer;
 
+    public static String getFileName (String nickName){
+        return "src/main/java/ru/JavaLevel2/Lesson7/client/chatHisotory/chathistory_" + nickName + ".txt";
+    }
+
     public ChatHistoryBuilder(String nickName) {
 
-        String fileName = "src/main/java/ru/JavaLevel2/Lesson7/client/chatHisotory/chathistory_" + nickName + ".txt";
+        String fileName = getFileName(nickName);
 
         try {
             writer = new BufferedWriter(new FileWriter(fileName, true));
@@ -67,7 +71,8 @@ public class ChatHistoryBuilder {
         try {
             System.out.println(message);
             writer.write(message);
-            writer.write("\n");
+            writer.write(System.lineSeparator());
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

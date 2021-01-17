@@ -14,6 +14,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static ru.JavaLevel2.Lesson7.ClaintServer.Command.*;
 
@@ -37,7 +39,9 @@ public class ClientHandler {
         in  = new ObjectInputStream(clientSocket.getInputStream());
         out = new ObjectOutputStream(clientSocket.getOutputStream());
 
-        new Thread(() -> {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
+        executorService.execute(() -> {
             try {
                 authentication();
                 readMessages();
@@ -50,7 +54,7 @@ public class ClientHandler {
                     System.err.println("Failed to close connection!");
                 }
             }
-        }).start();
+        });
     }
 
     private void authentication() throws IOException {
@@ -74,7 +78,6 @@ public class ClientHandler {
         Timer timer = new Timer(true);
 
         timer.schedule(timerTask, 120000);//Запуск отдельного потока, который проверят ести ли логин
-
         while (true) {
             Command command = readCommand();
             if (command == null) {

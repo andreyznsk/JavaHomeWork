@@ -1,5 +1,7 @@
 package ru.JavaLevel2.Lesson7.server;
 
+import ru.JavaLevel2.Lesson7.client.models.ChatHistoryBuilder;
+
 import java.io.File;
 import java.sql.*;
 public class DataBaseAuthService implements AuthService {
@@ -135,13 +137,13 @@ public class DataBaseAuthService implements AuthService {
             File file = null;
             if (oldNicname != null)
 
-                file = new File("src/main/java/ru/JavaLevel2/Lesson7/client/chatHisotory/chathistory_" + oldNicname + ".txt");
+                file = new File(ChatHistoryBuilder.getFileName(nickname));
             System.out.println("oldNick = " + oldNicname);
 
             if (psUpdate.executeUpdate() == 1) {
                 System.out.println("Update is OK");
 
-                file.renameTo(new File("src/main/java/ru/JavaLevel2/Lesson7/client/chatHisotory/chathistory_" + nickname + ".txt"));
+                file.renameTo(new File(ChatHistoryBuilder.getFileName(nickname)));
                 file.delete();
                 return 1;
             }

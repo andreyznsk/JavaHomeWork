@@ -13,3 +13,6 @@ Andreyz: kjhg
 Andreyz: iu
 Andreyz: ff
 Andreyz: /end
+Я: 123
+Я: qwe
+Andreyz: /end
