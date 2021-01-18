@@ -6,10 +6,15 @@ public interface AuthService {
 
     String getNickByLoginPass(String login, String password);
 
-    int insertUser(String login, String password, String nickname);
+    default int insertUser(String login, String password, String nickname) {
+        System.out.println("Incorrect class");
+        return 0;
+    }
 
-    int updateUser(String login, String password, String nickname);
-
+    default int updateUser(String login, String password, String nickname) {
+        System.out.println("Incorrect class");
+        return 0;
+    }
 
 
 }

@@ -2,7 +2,7 @@ package ru.JavaLevel3.lesson4;
 
 public class ThreadABC {
     static final Object mon = new Object();
-    static volatile int currentNumThread = 1;
+    static volatile char currentNumThread = 'A';
     final static int NUM = 5;
 
     public static void main(String[] args) {
@@ -11,9 +11,9 @@ public class ThreadABC {
             try {
                 for (int i = 0; i < NUM; i++) {
                     synchronized (mon) {
-                        while (currentNumThread!=1) mon.wait();
+                        while (currentNumThread!='A') mon.wait();
                         System.out.print("A");
-                        currentNumThread = 2;
+                        currentNumThread = 'B';
                         mon.notifyAll();
                     }
                 }
@@ -27,9 +27,9 @@ public class ThreadABC {
             try {
                 for (int i = 0; i < NUM; i++) {
                     synchronized (mon) {
-                        while (currentNumThread!=2) mon.wait();
+                        while (currentNumThread!='B') mon.wait();
                         System.out.print("B");
-                        currentNumThread = 3;
+                        currentNumThread = 'C';
                         mon.notifyAll();
                     }
                 }
@@ -44,10 +44,10 @@ public class ThreadABC {
             try {
                 for (int i = 0; i < NUM; i++) {
                     synchronized (mon) {
-                        while (currentNumThread!=3) mon.wait();
+                        while (currentNumThread!='C') mon.wait();
                         System.out.print("C");
                         System.out.println();
-                        currentNumThread = 1;
+                        currentNumThread = 'A';
                         mon.notifyAll();
                     }
                 }
