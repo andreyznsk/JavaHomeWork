@@ -3,25 +3,36 @@ package ru.JavaLevel2.Lesson7.server;
 import ru.JavaLevel2.Lesson7.ClaintServer.Command;
 import ru.JavaLevel2.Lesson7.server.Handler.ClientHandler;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class MyServer {
-
+    private static final Logger logger = Logger.getLogger(MyServer.class.getName());
     private final List<ClientHandler> clients = new ArrayList<>();
     private final AuthService authService;
 
     public MyServer() {
         this.authService = new DataBaseAuthService();
+        LogManager manager = LogManager.getLogManager();
+        try {
+            manager.readConfiguration(new FileInputStream("logging.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start(int port) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Сервер был запущен");
+            logger.log(Level.SEVERE,"Сервер был запущен");
+          //  System.out.println("Сервер был запущен");
             runServerMessageThread();
             authService.start();
             //noinspection InfiniteLoopStatement
@@ -29,8 +40,10 @@ public class MyServer {
                 waitAndProcessNewClientConnection(serverSocket);
             }
         } catch (IOException e) {
-            System.err.println("Failed to accept new connection");
-            e.printStackTrace();
+            logger.log(Level.WARNING,"Failed to accept new connection", e);
+
+
+
         } finally {
             authService.stop();
         }
@@ -44,8 +57,7 @@ public class MyServer {
                 try {
                     broadcastMessage("Сервер: " + serverMessage, null);
                 } catch (IOException e) {
-                    System.err.println("failed to process serverMessage");
-                    e.printStackTrace();
+                    logger.log(Level.WARNING,"failed to process serverMessage",e);
                 }
             }
         });
@@ -54,9 +66,12 @@ public class MyServer {
     }
 
     private void waitAndProcessNewClientConnection(ServerSocket serverSocket) throws IOException {
-        System.out.println("Ожидание нового подключения....");
+        logger.log(Level.SEVERE,"Ожидание нового подключения....");
+       // System.out.println("Ожидание нового подключения....");
+
         Socket clientSocket = serverSocket.accept();
-        System.out.println("Клиент подключился");// /auth login password
+        logger.log(Level.SEVERE,"Клиент подключился");
+       // System.out.println("Клиент подключился");// /auth login password
         processClientConnection(clientSocket);
     }
 

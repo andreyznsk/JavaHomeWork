@@ -4,11 +4,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class Car implements Runnable {
-    private static int CARS_COUNT ;
+    private static int CARS_COUNT = 0;
 
-    static {
-        CARS_COUNT = 0;
-    }
 
     private final Race race;
     private int speed;
@@ -36,15 +33,15 @@ public class Car implements Runnable {
             MainClass.printMessages(this.name + " готовится");
             Thread.sleep(500 + (int) (Math.random() * 800));
             MainClass.printMessages(this.name + " готов");
-            MainClass.cb_start.await();
-            MainClass.cb_print_start.await();
+            MainClass.cb.await();
+            MainClass.cb.await();
 
             for (int i = 0; i < race.getStages().size(); i++) race.getStages().get(i).go(this);
 
             if(MainClass.winLock.tryLock())
                 MainClass.printMessages(getName() + " - WIN");
 
-            MainClass.cb_end.await();
+            MainClass.cb.await();
         } catch (Exception e) {
             e.printStackTrace();
         }

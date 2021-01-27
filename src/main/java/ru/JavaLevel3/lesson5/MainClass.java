@@ -16,9 +16,7 @@ public class MainClass {
     public static final int CARS_COUNT = 4;
     public static Semaphore tunnel = new Semaphore(CARS_COUNT / 2);
     public static Semaphore consolePrint = new Semaphore(1);
-    public static CyclicBarrier cb_start = new CyclicBarrier(CARS_COUNT+1);
-    public static CyclicBarrier cb_print_start = new CyclicBarrier(CARS_COUNT+1);
-    public static CyclicBarrier cb_end = new CyclicBarrier(CARS_COUNT + 1);
+    public static CyclicBarrier cb = new CyclicBarrier(CARS_COUNT+1);
     public static Lock winLock = new ReentrantLock();
 
     public static void main(String[] args) throws Exception{
@@ -31,12 +29,11 @@ public class MainClass {
         for (int i = 0; i < cars.length; i++) {
             new Thread(cars[i]).start();
         }
-        cb_start.await();
+        cb.await();
 
         printMessages("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-        cb_print_start.await();
-
-        cb_end.await();
+        cb.await();
+        cb.await();
         printMessages("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
 
     }

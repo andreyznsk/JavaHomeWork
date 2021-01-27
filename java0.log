@@ -1,0 +1,85 @@
+янв 20, 2021 5:39:05 PM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+янв 20, 2021 5:39:05 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+янв 20, 2021 5:39:05 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+янв 20, 2021 5:39:05 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 5:40:18 PM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+янв 20, 2021 5:40:18 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+янв 20, 2021 5:40:18 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+янв 20, 2021 5:40:18 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 5:40:21 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Клиент подключился
+янв 20, 2021 5:40:21 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 5:40:23 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andreyz' зашел в чат!
+янв 20, 2021 5:40:25 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: close connection!
+янв 20, 2021 5:40:25 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: Пользователь 'Andreyz' покинул чат!
+янв 20, 2021 6:19:37 PM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+янв 20, 2021 6:19:37 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+янв 20, 2021 6:19:38 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+янв 20, 2021 6:19:38 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 6:19:38 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Клиент подключился
+янв 20, 2021 6:19:38 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 6:19:40 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: Пользователь 'null' покинул чат!
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.net.SocketInputStream.read(SocketInputStream.java:224)
+	at java.io.ObjectInputStream$PeekInputStream.peek(ObjectInputStream.java:2719)
+	at java.io.ObjectInputStream$BlockDataInputStream.peek(ObjectInputStream.java:3026)
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:3036)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1597)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:482)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:440)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readCommand(ClientHandler.java:168)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.authentication(ClientHandler.java:99)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.lambda$handle$0(ClientHandler.java:56)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+янв 20, 2021 6:19:47 PM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+янв 20, 2021 6:19:48 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+янв 20, 2021 6:19:48 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+янв 20, 2021 6:19:48 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 6:19:51 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Клиент подключился
+янв 20, 2021 6:19:51 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+янв 20, 2021 6:19:53 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andreyz' зашел в чат!
+янв 20, 2021 6:19:56 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: Пользователь 'Andreyz' покинул чат!
+java.io.EOFException
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:3038)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1597)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:482)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:440)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readCommand(ClientHandler.java:168)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readMessages(ClientHandler.java:179)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.lambda$handle$0(ClientHandler.java:57)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+

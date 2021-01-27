@@ -8,6 +8,7 @@ import ru.JavaLevel2.Lesson7.ClaintServer.commands.PrivateMessageCommandData;
 import ru.JavaLevel2.Lesson7.ClaintServer.commands.PublicMessageCommandData;
 import ru.JavaLevel2.Lesson7.server.MyServer;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,12 +17,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import static ru.JavaLevel2.Lesson7.ClaintServer.Command.*;
 
 
 public class ClientHandler {
-
+    private static final Logger logger = Logger.getLogger(MyServer.class.getName());
     private final MyServer myServer;
     private final Socket clientSocket;
 
@@ -33,6 +37,12 @@ public class ClientHandler {
     public ClientHandler(MyServer myServer, Socket clientSocket) {
         this.myServer = myServer;
         this.clientSocket = clientSocket;
+        LogManager manager = LogManager.getLogManager();
+        try {
+            manager.readConfiguration(new FileInputStream("logging.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handle() throws IOException {
@@ -46,12 +56,17 @@ public class ClientHandler {
                 authentication();
                 readMessages();
             } catch (IOException e) {
-                e.printStackTrace();
+
+                logger.log(Level.WARNING, String.format("Пользователь '%s' покинул чат!", nickname),e);
+                //e.printStackTrace();
             } finally {
                 try {
                     closeConnection();
                 } catch (IOException e) {
-                    System.err.println("Failed to close connection!");
+                    logger.log(Level.WARNING, "Failed to close connection!",e);
+
+
+                    //System.err.println("Failed to close connection!");
                 }
             }
         });
@@ -64,11 +79,13 @@ public class ClientHandler {
                 if(nickname==null) {//если логин не получен закрыть соединение
                     try {
                         sendCommand(closeByTimer());//Посылаем клиенту команду о разрыве соединения по таймеру
-                        System.out.println("Закрыаем соединение");
+                        logger.log(Level.SEVERE, "Закрыаем соединение");
+                        //System.out.println("Закрыаем соединение");
                         closeConnection();
 
                     } catch (IOException e) {
-                        System.err.println("Не смогли прервать подключение");
+                        logger.log(Level.WARNING, "Не смогли прервать подключение",e);
+                       // System.err.println("Не смогли прервать подключение");
 
                     }
                 }
@@ -90,6 +107,7 @@ public class ClientHandler {
                 String password = data.getPassword();
                 String nickname = data.getNickname();
                 if (myServer.getAuthService().insertUser(login,password,nickname)==0) {
+                    logger.log(Level.SEVERE, "Такой ник уже есть!!");
                     sendCommand(errorCommand("Такой ник уже есть!!"));
                     continue;
                 } else sendCommand(confirmationCommand("Регистрация прошла успешно!"));
@@ -102,9 +120,14 @@ public class ClientHandler {
                 String nickname = data.getNickname();
 
                 if (myServer.getAuthService().updateUser(login,password,nickname)==0) {
+
                     sendCommand(errorCommand("Логин или пароль некорркетны!"));
+                    logger.log(Level.SEVERE, "Логин или пароль некорркетны!");
                     continue;
-                } else sendCommand(confirmationCommand("Ник успешно изменен."));
+                } else {
+                    sendCommand(confirmationCommand("Ник успешно изменен."));
+                    logger.log(Level.SEVERE, "Ник успешно изменен.");
+                }
             }
 
 
@@ -115,16 +138,19 @@ public class ClientHandler {
                 String nickname = myServer.getAuthService().getNickByLoginPass(login, password);
                 if (nickname == null) {
                     sendCommand(errorCommand("Некорректные логин или пароль!"));
+                    logger.log(Level.SEVERE, "Некорректные логин или пароль!");
                     continue;
                 }
 
                 if (myServer.isNickBusy(nickname)) {
                     sendCommand(errorCommand("Такой пользователь уже вошел в чат!"));
+                    logger.log(Level.SEVERE, "Такой пользователь уже вошел в чат!");
                     continue;
                 }
 
                 sendCommand(authOkCommand(nickname));
                 setNickname(nickname);
+                logger.log(Level.SEVERE, String.format("Пользователь '%s' зашел в чат!", nickname));
                 myServer.broadcastMessage(String.format("Пользователь '%s' зашел в чат!", nickname), null);
                 myServer.subscribe(this);
                 return;
@@ -141,8 +167,8 @@ public class ClientHandler {
         try {
             command = (Command) in.readObject();
         } catch (ClassNotFoundException e) {
-            System.err.println("Failed to read Command class");
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Failed to read Command class",e);
+
         }
 
         return command;
