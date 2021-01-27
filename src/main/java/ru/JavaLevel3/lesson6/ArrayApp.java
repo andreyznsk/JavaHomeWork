@@ -1,6 +1,7 @@
 package ru.JavaLevel3.lesson6;
 
-import java.util.Arrays;
+import ru.JavaLevel3.lesson7.Test;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,10 +34,10 @@ public class ArrayApp {
         return  (unicListInt.size()==2 && unicListInt.contains(1) && unicListInt.contains(4));
     }
 
+    @Test
     public static void main(String[] args) {
         int[] b = new int[]{1,1,2,2,2};
         System.out.println(isOneFour(b));
-
-
     }
+
 }
