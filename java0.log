@@ -83,3 +83,75 @@ java.io.EOFException
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
 
+мар 11, 2021 10:01:13 AM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+мар 11, 2021 10:01:13 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+мар 11, 2021 10:01:13 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+мар 11, 2021 10:01:13 AM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 10:01:54 AM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+мар 11, 2021 10:01:54 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+мар 11, 2021 10:01:54 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+мар 11, 2021 10:01:54 AM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 10:02:52 AM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+мар 11, 2021 10:02:52 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+мар 11, 2021 10:02:52 AM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+мар 11, 2021 10:02:52 AM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 10:04:03 AM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Клиент подключился
+мар 11, 2021 10:04:03 AM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 10:04:14 AM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andreyz' зашел в чат!
+мар 11, 2021 10:04:25 AM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: Пользователь 'Andreyz' покинул чат!
+java.io.EOFException
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:3038)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1597)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:482)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:440)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readCommand(ClientHandler.java:168)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readMessages(ClientHandler.java:179)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.lambda$handle$0(ClientHandler.java:57)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+мар 11, 2021 9:32:15 PM ru.JavaLevel2.Lesson7.server.MyServer start
+SEVERE: Сервер был запущен
+мар 11, 2021 9:32:15 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Auth service is running
+мар 11, 2021 9:32:15 PM ru.JavaLevel2.Lesson7.server.DataBaseAuthService start
+SEVERE: Connect to bd main is successful
+мар 11, 2021 9:32:15 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 9:32:22 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Клиент подключился
+мар 11, 2021 9:32:22 PM ru.JavaLevel2.Lesson7.server.MyServer waitAndProcessNewClientConnection
+SEVERE: Ожидание нового подключения....
+мар 11, 2021 9:32:24 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andreyz' зашел в чат!
+мар 11, 2021 9:32:30 PM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler lambda$handle$0
+WARNING: Пользователь 'Andreyz' покинул чат!
+java.io.EOFException
+	at java.io.ObjectInputStream$BlockDataInputStream.peekByte(ObjectInputStream.java:3038)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1597)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:482)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:440)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readCommand(ClientHandler.java:168)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.readMessages(ClientHandler.java:179)
+	at ru.JavaLevel2.Lesson7.server.Handler.ClientHandler.lambda$handle$0(ClientHandler.java:57)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
