@@ -3,82 +3,84 @@ package ru.JavaLevel2.Lesson7.server;
 import ru.JavaLevel2.Lesson7.ClaintServer.Command;
 import ru.JavaLevel2.Lesson7.server.Handler.ClientHandler;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.Set;
+
 
 public class MyServer {
-    private static final Logger logger = Logger.getLogger(MyServer.class.getName());
+
     private final List<ClientHandler> clients = new ArrayList<>();
     private final AuthService authService;
 
     public MyServer() {
-        this.authService = new DataBaseAuthService();
-        LogManager manager = LogManager.getLogManager();
-        try {
-            manager.readConfiguration(new FileInputStream("logging.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.authService = new DataBaseMySqlAuthService();
+
     }
 
     public void start(int port) throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            logger.log(Level.SEVERE,"Сервер был запущен");
-          //  System.out.println("Сервер был запущен");
-            runServerMessageThread();
+
+            Selector selector = Selector.open();
+            ServerSocketChannel serverSocket = ServerSocketChannel.open();
+            serverSocket.socket().bind(new InetSocketAddress("localhost", port));
+            serverSocket.configureBlocking(false);
+            serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+            System.out.println("Server started");
+
             authService.start();
             //noinspection InfiniteLoopStatement
+        try {
             while (true) {
-                waitAndProcessNewClientConnection(serverSocket);
+                selector.select();
+
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Iterator<SelectionKey> iterator = selectionKeys.iterator();
+                while (iterator.hasNext()) {
+                    SelectionKey selectionKey = iterator.next();
+                    if (selectionKey.isAcceptable()) {
+                        System.out.println("New selector event");
+                        System.out.println("New selector acceptable event");
+                        register(selector, serverSocket);
+                    }
+
+                    if (selectionKey.isReadable()) {
+                        //System.out.println("New selector readable event");
+                        readMessage(selectionKey);
+                    }
+                    iterator.remove();
+                }
+
             }
         } catch (IOException e) {
-            logger.log(Level.WARNING,"Failed to accept new connection", e);
-
-
-
+            e.printStackTrace();
         } finally {
             authService.stop();
         }
+
     }
 
-    private void runServerMessageThread() {
-        Thread serverMessageThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            while (true) {
-                String serverMessage = scanner.next();
-                try {
-                    broadcastMessage("Сервер: " + serverMessage, null);
-                } catch (IOException e) {
-                    logger.log(Level.WARNING,"failed to process serverMessage",e);
-                }
-            }
-        });
-        serverMessageThread.setDaemon(true);
-        serverMessageThread.start();
+    public void register(Selector selector, ServerSocketChannel serverSocket) throws IOException {
+        SocketChannel client = serverSocket.accept();
+        client.configureBlocking(false);
+        client.register(selector, SelectionKey.OP_READ);
+        System.out.println("New client is connected");
     }
 
-    private void waitAndProcessNewClientConnection(ServerSocket serverSocket) throws IOException {
-        logger.log(Level.SEVERE,"Ожидание нового подключения....");
-       // System.out.println("Ожидание нового подключения....");
 
-        Socket clientSocket = serverSocket.accept();
-        logger.log(Level.SEVERE,"Клиент подключился");
-       // System.out.println("Клиент подключился");// /auth login password
-        processClientConnection(clientSocket);
-    }
-
-    private void processClientConnection(Socket clientSocket) throws IOException {
-        ClientHandler clientHandler = new ClientHandler(this, clientSocket);
+    public void readMessage(SelectionKey key) throws IOException {
+        SocketChannel client = (SocketChannel) key.channel();
+        ClientHandler clientHandler = new ClientHandler(this, client);
         clientHandler.handle();
     }
+
+
 
     public synchronized void broadcastMessage(String message, ClientHandler sender) throws IOException {
 

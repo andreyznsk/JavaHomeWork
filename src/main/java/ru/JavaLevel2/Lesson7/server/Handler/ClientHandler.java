@@ -1,18 +1,20 @@
 package ru.JavaLevel2.Lesson7.server.Handler;
 
+import org.apache.commons.lang3.SerializationUtils;
 import ru.JavaLevel2.Lesson7.ClaintServer.Command;
 import ru.JavaLevel2.Lesson7.ClaintServer.CommandType;
 import ru.JavaLevel2.Lesson7.ClaintServer.commands.AuthCommandData;
 import ru.JavaLevel2.Lesson7.ClaintServer.commands.AuthRegData;
-import ru.JavaLevel2.Lesson7.ClaintServer.commands.PrivateMessageCommandData;
-import ru.JavaLevel2.Lesson7.ClaintServer.commands.PublicMessageCommandData;
+import ru.JavaLevel2.Lesson7.ClaintServer.commands.*;
 import ru.JavaLevel2.Lesson7.server.MyServer;
+
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -27,16 +29,16 @@ import static ru.JavaLevel2.Lesson7.ClaintServer.Command.*;
 public class ClientHandler {
     private static final Logger logger = Logger.getLogger(MyServer.class.getName());
     private final MyServer myServer;
-    private final Socket clientSocket;
+    private final SocketChannel serverSocket;
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
     private String nickname;
 
-    public ClientHandler(MyServer myServer, Socket clientSocket) {
+    public ClientHandler(MyServer myServer, SocketChannel serverSocket) {
         this.myServer = myServer;
-        this.clientSocket = clientSocket;
+        this.serverSocket = serverSocket;
         LogManager manager = LogManager.getLogManager();
         try {
             manager.readConfiguration(new FileInputStream("logging.properties"));
@@ -46,8 +48,7 @@ public class ClientHandler {
     }
 
     public void handle() throws IOException {
-        in  = new ObjectInputStream(clientSocket.getInputStream());
-        out = new ObjectOutputStream(clientSocket.getOutputStream());
+
 
         ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -56,17 +57,12 @@ public class ClientHandler {
                 authentication();
                 readMessages();
             } catch (IOException e) {
-
-                logger.log(Level.WARNING, String.format("Пользователь '%s' покинул чат!", nickname),e);
-                //e.printStackTrace();
+              e.printStackTrace();
             } finally {
                 try {
                     closeConnection();
                 } catch (IOException e) {
-                    logger.log(Level.WARNING, "Failed to close connection!",e);
-
-
-                    //System.err.println("Failed to close connection!");
+                  System.err.println("Failed to close connection!");
                 }
             }
         });
@@ -79,13 +75,13 @@ public class ClientHandler {
                 if(nickname==null) {//если логин не получен закрыть соединение
                     try {
                         sendCommand(closeByTimer());//Посылаем клиенту команду о разрыве соединения по таймеру
-                        logger.log(Level.SEVERE, "Закрыаем соединение");
-                        //System.out.println("Закрыаем соединение");
+                       // logger.log(Level.SEVERE, "Закрыаем соединение");
+                        System.out.println("Закрыаем соединение");
                         closeConnection();
 
                     } catch (IOException e) {
-                        logger.log(Level.WARNING, "Не смогли прервать подключение",e);
-                       // System.err.println("Не смогли прервать подключение");
+                        //logger.log(Level.WARNING, "Не смогли прервать подключение",e);
+                       System.err.println("Не смогли прервать подключение");
 
                     }
                 }
@@ -159,16 +155,31 @@ public class ClientHandler {
     }
 
     public void sendCommand(Command command) throws IOException {
-        out.writeObject(command);
+        byte[] data = SerializationUtils.serialize(command);
+        serverSocket.write(ByteBuffer.wrap(data));
     }
 
     private Command readCommand() throws IOException {
         Command command = null;
-        try {
-            command = (Command) in.readObject();
-        } catch (ClassNotFoundException e) {
-            logger.log(Level.WARNING, "Failed to read Command class",e);
+        byte[] data = new byte[1024];
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        int r = serverSocket.read(byteBuffer);
+        if(r!=0) {
 
+            //System.out.println(r);
+            while (r != 0) {
+                byteBuffer.flip();
+                int i = 0;
+                while (byteBuffer.hasRemaining()) {
+                    data[i] = byteBuffer.get();
+                    //System.out.println(data[i]);
+                    i++;
+                }
+                byteBuffer.clear();
+                r = serverSocket.read(byteBuffer);
+            }
+            //System.out.println(Arrays.toString(data));
+            command = SerializationUtils.deserialize(data);
         }
 
         return command;
@@ -206,7 +217,7 @@ public class ClientHandler {
 
     private void closeConnection() throws IOException {
         myServer.unsubscribe(this);
-        clientSocket.close();
+        serverSocket.close();
     }
 
 

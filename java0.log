@@ -155,3 +155,7 @@ java.io.EOFException
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at java.lang.Thread.run(Thread.java:748)
 
+мар 15, 2021 7:58:03 AM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andrey' зашел в чат!
+мар 15, 2021 8:00:15 AM ru.JavaLevel2.Lesson7.server.Handler.ClientHandler authentication
+SEVERE: Пользователь 'Andrey' зашел в чат!
